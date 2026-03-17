@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Toko - Dokumentasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navbar Modern */
+        .navbar-custom {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards */
+        .api-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .api-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .api-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header-custom {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .icon-kategori { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .icon-produk { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .icon-transaksi { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #0f172a;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+            margin: 1rem 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .btn-copy {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-copy:hover {
+            background: rgba(255,255,255,0.2);
+            color: var(--text-primary);
+        }
+
+        .btn-copy.copied {
+            background: #10b981;
+            color: white;
+        }
+
+        /* HTTP Methods */
+        .method-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.25rem;
+            border: 1px solid transparent;
+        }
+
+        .method-get { background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        .method-post { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3); }
+        .method-put { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); }
+        .method-delete { background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+
+        /* Base URL Card */
+        .base-url-card {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .base-url-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .base-url-code {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Database Section */
+        .db-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .db-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-pills-custom .nav-link {
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 0 0.25rem;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .nav-pills-custom .nav-link:hover {
+            color: var(--text-primary);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .nav-pills-custom .nav-link.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-content-custom {
+            padding: 1.5rem;
+        }
+
+        /* SQL Syntax Highlighting */
+        .sql-keyword { color: #c678dd; }
+        .sql-string { color: #98c379; }
+        .sql-number { color: #d19a66; }
+        .sql-comment { color: #5c6370; font-style: italic; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .method-badge { display: flex; margin: 0.25rem 0; }
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-box-seam-fill"></i>
+                API TOKO
+            </a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link text-light" href="#endpoints">Endpoints</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="#database">Database</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="#sql">SQL</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" style="margin-top: 80px;">
+        <div class="container text-center position-relative">
+            <h1 class="hero-title fade-in">Dokumentasi API</h1>
+            <p class="lead text-secondary fade-in" style="animation-delay: 0.1s;">
+                REST API lengkap dengan PHP & MySQL untuk manajemen toko
+            </p>
+            <div class="mt-4 fade-in" style="animation-delay: 0.2s;">
+                <span class="badge bg-primary me-2"><i class="bi bi-check-circle"></i> PHP Native</span>
+                <span class="badge bg-success me-2"><i class="bi bi-check-circle"></i> MySQL</span>
+                <span class="badge bg-info"><i class="bi bi-check-circle"></i> RESTful</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <!-- Base URL -->
+        <div class="base-url-card mb-5 fade-in">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <i class="bi bi-link-45deg fs-2"></i>
+                <div>
+                    <h4 class="mb-0">Base URL</h4>
+                    <small class="opacity-75">Endpoint utama API</small>
+                </div>
+            </div>
+            <div class="base-url-code">
+                <code id="baseUrl">http://localhost/api_toko/</code>
+                <button class="btn btn-light btn-sm" onclick="copyToClipboard('baseUrl', this)">
+                    <i class="bi bi-clipboard"></i> Copy
+                </button>
+            </div>
+        </div>
+
+        <!-- API Endpoints -->
+        <h3 class="mb-4 section-title" id="endpoints">
+            <i class="bi bi-hdd-network text-primary me-2"></i>API Endpoints
+        </h3>
+        
+        <div class="row g-4 mb-5">
+            
+            <!-- Kategori -->
+            <div class="col-lg-4 col-md-6">
+                <div class="api-card">
+                    <div class="card-header-custom">
+                        <div class="card-icon icon-kategori">
+                            <i class="bi bi-tags-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Kategori</h5>
+                            <small class="text-secondary">Manajemen kategori produk</small>
+                        </div>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Endpoint</span>
+                                <button class="btn-copy" onclick="copyText('http://localhost/api_toko/kategori.php', this)">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                            <code class="text-info">http://localhost/api_toko/kategori.php</code>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-secondary d-block mb-2">HTTP Methods:</small>
+                            <span class="method-badge method-get"><i class="bi bi-arrow-down-circle"></i> GET</span>
+                            <span class="method-badge method-post"><i class="bi bi-plus-circle"></i> POST</span>
+                            <span class="method-badge method-put"><i class="bi bi-arrow-clockwise"></i> PUT</span>
+                            <span class="method-badge method-delete"><i class="bi bi-trash"></i> DELETE</span>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Parameter</span>
+                            </div>
+                            <code> nama_kategori = <span class="sql-string">"Makanan"</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produk -->
+            <div class="col-lg-4 col-md-6">
+                <div class="api-card">
+                    <div class="card-header-custom">
+                        <div class="card-icon icon-produk">
+                            <i class="bi bi-box-seam-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Produk</h5>
+                            <small class="text-secondary">Manajemen data produk</small>
+                        </div>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Endpoint</span>
+                                <button class="btn-copy" onclick="copyText('http://localhost/api_toko/produk.php', this)">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                            <code class="text-info">http://localhost/api_toko/produk.php</code>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-secondary d-block mb-2">HTTP Methods:</small>
+                            <span class="method-badge method-get"><i class="bi bi-arrow-down-circle"></i> GET</span>
+                            <span class="method-badge method-post"><i class="bi bi-plus-circle"></i> POST</span>
+                            <span class="method-badge method-put"><i class="bi bi-arrow-clockwise"></i> PUT</span>
+                            <span class="method-badge method-delete"><i class="bi bi-trash"></i> DELETE</span>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Parameters</span>
+                            </div>
+                            <code>
+                                nama_produk = <span class="sql-string">"Sabun"</span><br>
+                                harga = <span class="sql-number">10000</span><br>
+                                id_kategori = <span class="sql-number">1</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaksi -->
+            <div class="col-lg-4 col-md-6">
+                <div class="api-card">
+                    <div class="card-header-custom">
+                        <div class="card-icon icon-transaksi">
+                            <i class="bi bi-cart-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0">Transaksi</h5>
+                            <small class="text-secondary">Manajemen transaksi penjualan</small>
+                        </div>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Endpoint</span>
+                                <button class="btn-copy" onclick="copyText('http://localhost/api_toko/transaksi.php', this)">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                            <code class="text-info">http://localhost/api_toko/transaksi.php</code>
+                        </div>
+
+                        <div class="mb-3">
+                            <small class="text-secondary d-block mb-2">HTTP Methods:</small>
+                            <span class="method-badge method-get"><i class="bi bi-arrow-down-circle"></i> GET <small>(JOIN)</small></span>
+                            <span class="method-badge method-post"><i class="bi bi-plus-circle"></i> POST</span>
+                            <span class="method-badge method-put"><i class="bi bi-arrow-clockwise"></i> PUT</span>
+                            <span class="method-badge method-delete"><i class="bi bi-trash"></i> DELETE</span>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-label">Parameters</span>
+                            </div>
+                            <code>
+                                tanggal = <span class="sql-string">"2026-03-17"</span><br>
+                                id_produk = <span class="sql-number">1</span><br>
+                                jumlah = <span class="sql-number">2</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Schema -->
+        <h3 class="mb-4 section-title" id="database">
+            <i class="bi bi-diagram-3-fill text-primary me-2"></i>Database Schema
+        </h3>
+
+        <div class="db-card mb-5">
+            <div class="db-header">
+                <h5 class="mb-3"><i class="bi bi-table me-2"></i>Relasi Database</h5>
+                <div class="row text-center g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded bg-dark border border-secondary">
+                            <i class="bi bi-folder-fill text-primary fs-3"></i>
+                            <h6 class="mt-2 mb-1">kategori</h6>
+                            <small class="text-secondary">1</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded bg-dark border border-secondary">
+                            <i class="bi bi-box-fill text-danger fs-3"></i>
+                            <h6 class="mt-2 mb-1">produk</h6>
+                            <small class="text-secondary">N</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded bg-dark border border-secondary">
+                            <i class="bi bi-receipt text-success fs-3"></i>
+                            <h6 class="mt-2 mb-1">transaksi</h6>
+                            <small class="text-secondary">N</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-secondary">
+                        <i class="bi bi-arrow-right"></i> 
+                        One to Many Relationship 
+                        <i class="bi bi-arrow-right"></i>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- SQL Section -->
+        <h3 class="mb-4 section-title" id="sql">
+            <i class="bi bi-code-square text-primary me-2"></i>SQL Reference
+        </h3>
+
+        <div class="db-card">
+            <ul class="nav nav-pills nav-pills-custom p-3 border-bottom border-secondary" id="sqlTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="create-tab" data-bs-toggle="pill" data-bs-target="#create" type="button">
+                        <i class="bi bi-hammer me-1"></i> Create Table
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="insert-tab" data-bs-toggle="pill" data-bs-target="#insert" type="button">
+                        <i class="bi bi-database-add me-1"></i> Insert Data
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content tab-content-custom" id="sqlTabContent">
+                <!-- Create Table -->
+                <div class="tab-pane fade show active" id="create">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-table me-1"></i> kategori</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">CREATE TABLE</span> kategori (
+    id_kategori <span class="sql-keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    nama_kategori <span class="sql-keyword">VARCHAR</span>(100)
+);</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-box me-1"></i> produk</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">CREATE TABLE</span> produk (
+    id_produk <span class="sql-keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    nama_produk <span class="sql-keyword">VARCHAR</span>(100),
+    harga <span class="sql-keyword">INT</span>,
+    id_kategori <span class="sql-keyword">INT</span>,
+    <span class="sql-keyword">FOREIGN KEY</span> (id_kategori) <span class="sql-keyword">REFERENCES</span> kategori(id_kategori)
+);</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-receipt me-1"></i> transaksi</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">CREATE TABLE</span> transaksi (
+    id_transaksi <span class="sql-keyword">INT AUTO_INCREMENT PRIMARY KEY</span>,
+    tanggal <span class="sql-keyword">DATE</span>,
+    id_produk <span class="sql-keyword">INT</span>,
+    jumlah <span class="sql-keyword">INT</span>,
+    <span class="sql-keyword">FOREIGN KEY</span> (id_produk) <span class="sql-keyword">REFERENCES</span> produk(id_produk)
+);</code></pre>
+                    </div>
+                </div>
+
+                <!-- Insert Data -->
+                <div class="tab-pane fade" id="insert">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-folder me-1"></i> Kategori</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">INSERT INTO</span> kategori (nama_kategori) <span class="sql-keyword">VALUES</span>
+(<span class="sql-string">'Makanan'</span>),
+(<span class="sql-string">'Minuman'</span>),
+(<span class="sql-string">'Elektronik'</span>),
+(<span class="sql-string">'Pakaian'</span>),
+(<span class="sql-string">'Alat Tulis'</span>),
+(<span class="sql-string">'Kosmetik'</span>),
+(<span class="sql-string">'Mainan'</span>),
+(<span class="sql-string">'Furniture'</span>),
+(<span class="sql-string">'Olahraga'</span>),
+(<span class="sql-string">'Kesehatan'</span>);</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-box me-1"></i> Produk</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">INSERT INTO</span> produk (nama_produk, harga, id_kategori) <span class="sql-keyword">VALUES</span>
+(<span class="sql-string">'Nasi Goreng'</span>, <span class="sql-number">15000</span>, <span class="sql-number">1</span>),
+(<span class="sql-string">'Es Teh'</span>, <span class="sql-number">5000</span>, <span class="sql-number">2</span>),
+(<span class="sql-string">'Laptop'</span>, <span class="sql-number">7000000</span>, <span class="sql-number">3</span>),
+(<span class="sql-string">'Kaos'</span>, <span class="sql-number">50000</span>, <span class="sql-number">4</span>),
+(<span class="sql-string">'Pulpen'</span>, <span class="sql-number">3000</span>, <span class="sql-number">5</span>),
+(<span class="sql-string">'Lipstik'</span>, <span class="sql-number">25000</span>, <span class="sql-number">6</span>),
+(<span class="sql-string">'Boneka'</span>, <span class="sql-number">80000</span>, <span class="sql-number">7</span>),
+(<span class="sql-string">'Meja'</span>, <span class="sql-number">300000</span>, <span class="sql-number">8</span>),
+(<span class="sql-string">'Bola'</span>, <span class="sql-number">100000</span>, <span class="sql-number">9</span>),
+(<span class="sql-string">'Vitamin C'</span>, <span class="sql-number">20000</span>, <span class="sql-number">10</span>);</code></pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-label"><i class="bi bi-receipt me-1"></i> Transaksi</span>
+                            <button class="btn-copy" onclick="copyCodeBlock(this)"><i class="bi bi-clipboard"></i> Copy</button>
+                        </div>
+                        <pre><code><span class="sql-keyword">INSERT INTO</span> transaksi (tanggal, id_produk, jumlah) <span class="sql-keyword">VALUES</span>
+(<span class="sql-string">'2026-01-01'</span>, <span class="sql-number">1</span>, <span class="sql-number">2</span>),
+(<span class="sql-string">'2026-01-02'</span>, <span class="sql-number">2</span>, <span class="sql-number">3</span>),
+(<span class="sql-string">'2026-01-03'</span>, <span class="sql-number">3</span>, <span class="sql-number">1</span>),
+(<span class="sql-string">'2026-01-04'</span>, <span class="sql-number">4</span>, <span class="sql-number">5</span>),
+(<span class="sql-string">'2026-01-05'</span>, <span class="sql-number">5</span>, <span class="sql-number">10</span>),
+(<span class="sql-string">'2026-01-06'</span>, <span class="sql-number">6</span>, <span class="sql-number">2</span>),
+(<span class="sql-string">'2026-01-07'</span>, <span class="sql-number">7</span>, <span class="sql-number">1</span>),
+(<span class="sql-string">'2026-01-08'</span>, <span class="sql-number">8</span>, <span class="sql-number">1</span>),
+(<span class="sql-string">'2026-01-09'</span>, <span class="sql-number">9</span>, <span class="sql-number">4</span>),
+(<span class="sql-string">'2026-01-10'</span>, <span class="sql-number">10</span>, <span class="sql-number">3</span>);</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="mb-2">
+                <i class="bi bi-code-slash text-primary"></i> 
+                Dibuat dengan <i class="bi bi-heart-fill text-danger"></i> menggunakan HTML & Bootstrap 5
+            </p>
+            <small class="text-muted">API Toko Documentation &copy; 2026</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Copy text function
+        function copyText(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Copy base URL
+        function copyToClipboard(elementId, btn) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                btn.classList.remove('btn-light');
+                btn.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-light');
+                }, 2000);
+            });
+        }
+
+        // Copy code block
+        function copyCodeBlock(btn) {
+            const codeBlock = btn.closest('.code-block').querySelector('code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
